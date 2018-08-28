@@ -7,19 +7,38 @@
 //
 
 import UIKit
+import GRDB
 
 class ViewController: UIViewController {
+    
+    var dbQueue: DatabaseQueue!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("users").appendingPathExtension("sqlite")
+            
+            dbQueue = try DatabaseQueue(path: fileUrl.path)
+        } catch {
+            print(error)
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func createTable(_ sender: Any) {
     }
-
-
+    
+    @IBAction func insertUser(_ sender: Any) {
+    }
+    
+    @IBAction func listUsers(_ sender: Any) {
+    }
+    
+    @IBAction func updateUser(_ sender: Any) {
+    }
+    
+    @IBAction func deleteUser(_ sender: Any) {
+    }
 }
 
