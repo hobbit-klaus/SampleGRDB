@@ -52,6 +52,12 @@ class ViewController: UIViewController {
                 try db.execute("""
                     INSERT INTO users (name, email) VALUES (?, ?);
                 """, arguments: ["User1", "a@a.com"])
+                try db.execute("""
+                    INSERT INTO users (name, email) VALUES (?, ?);
+                """, arguments: ["User2", "b@a.com"])
+                try db.execute("""
+                    INSERT INTO users (name, email) VALUES (?, ?);
+                """, arguments: ["User3", "c@a.com"])
             }
         } catch {
             print(error)
@@ -85,9 +91,27 @@ class ViewController: UIViewController {
     }
     
     @IBAction func updateUser(_ sender: Any) {
+        do {
+            try dbQueue.write { db in
+                try db.execute("""
+                    UPDATE users SET email = ? where name = ?
+                """, arguments: ["a@B.com", "User1"])
+            }
+        } catch {
+            print(error)
+        }
     }
     
     @IBAction func deleteUser(_ sender: Any) {
+        do {
+            try dbQueue.write { db in
+                try db.execute("""
+                    DELETE FROM users where name = ?
+                """, arguments: ["User1"])
+            }
+        } catch {
+            print(error)
+        }
     }
 }
 
