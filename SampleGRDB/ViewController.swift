@@ -11,6 +11,47 @@ import GRDB
 
 class ViewController: UIViewController {
     
+    class User: Record {
+        var id: Int64?
+        var name: String
+        var email: String
+        
+        init(id: Int64? = nil, name: String, email: String) {
+            self.id = id
+            self.name = name
+            self.email = email
+            
+            super.init()
+        }
+        
+        required init(row: Row) {
+            id = row[Columns.id]
+            name = row[Columns.name]
+            email = row[Columns.email]
+            
+            super.init(row: row)
+        }
+        
+        override func encode(to container: inout PersistenceContainer) {
+            container[Columns.id] = id
+            container[Columns.name] = name
+            container[Columns.email] = email
+        }
+        
+        override func didInsert(with rowID: Int64, for column: String?) {
+            id = rowID
+        }
+        
+        /// The table name
+        override class var databaseTableName: String {
+            return "users"
+        }
+        
+        enum Columns: String, ColumnExpression {
+            case id, name, email
+        }
+    }
+    
     var dbQueue: DatabaseQueue!
     
     let usersTable = "users"
@@ -26,6 +67,10 @@ class ViewController: UIViewController {
             let fileUrl = documentDirectory.appendingPathComponent("users").appendingPathExtension("sqlite")
             
             dbQueue = try DatabaseQueue(path: fileUrl.path)
+            
+            try dbQueue.write { db in
+                _ = try User.deleteAll(db)
+            }
         } catch {
             print(error)
         }
@@ -49,15 +94,13 @@ class ViewController: UIViewController {
     @IBAction func insertUser(_ sender: Any) {
         do {
             try dbQueue.write { db in
-                try db.execute("""
-                    INSERT INTO users (name, email) VALUES (?, ?);
-                """, arguments: ["User1", "a@a.com"])
-                try db.execute("""
-                    INSERT INTO users (name, email) VALUES (?, ?);
-                """, arguments: ["User2", "b@a.com"])
-                try db.execute("""
-                    INSERT INTO users (name, email) VALUES (?, ?);
-                """, arguments: ["User3", "c@a.com"])
+                let user1 = User(name: "User1", email: "a@a.com")
+                let user2 = User(name: "User2", email: "c@b.com")
+                let user3 = User(name: "User3", email: "c@c.com")
+                
+                try user1.insert(db)
+                try user2.insert(db)
+                try user3.insert(db)
             }
         } catch {
             print(error)
@@ -67,22 +110,10 @@ class ViewController: UIViewController {
     @IBAction func listUsers(_ sender: Any) {
         do {
             try dbQueue.read { db in
-//                let rows = try Row.fetchCursor(db, "SELECT * FROM users")
-//                while let row = try rows.next() {
-//                    let name: String = row["name"]
-//                    let email: String = row["email"]
-//
-//                    print(name)
-//                    print(email)
-//                }
-                
-                let rows = try Row.fetchAll(db, "SELECT * FROM users")
-                for row in rows {
-                    let name: String = row["name"]
-                    let email: String = row["email"]
-                    
-                    print(name)
-                    print(email)
+                let users = try User.fetchAll(db)
+                for user in users {
+                    print(user.name)
+                    print(user.email)
                 }
             }
         } catch {
@@ -93,9 +124,15 @@ class ViewController: UIViewController {
     @IBAction func updateUser(_ sender: Any) {
         do {
             try dbQueue.write { db in
-                try db.execute("""
-                    UPDATE users SET email = ? where name = ?
-                """, arguments: ["a@B.com", "User1"])
+//                for user in try User.fetchAll(db) where user.name == "User1" {
+//                    user.email = "d@d.com"
+//                    try user.update(db)
+//                }
+                
+                // Such records can also delete according to primary key or any unique index:
+                let user = try User.fetchOne(db, key: ["email": "a@a.com"])
+                user?.email = "d@d.com"
+                try user?.update(db)
             }
         } catch {
             print(error)
@@ -105,9 +142,7 @@ class ViewController: UIViewController {
     @IBAction func deleteUser(_ sender: Any) {
         do {
             try dbQueue.write { db in
-                try db.execute("""
-                    DELETE FROM users where name = ?
-                """, arguments: ["User1"])
+                _ = try User.deleteOne(db, key: ["email": "d@d.com"])
             }
         } catch {
             print(error)
