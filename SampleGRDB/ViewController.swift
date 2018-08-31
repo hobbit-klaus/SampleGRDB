@@ -11,47 +11,6 @@ import GRDB
 
 class ViewController: UIViewController {
     
-    class User: Record {
-        var id: Int64?
-        var name: String
-        var email: String
-        
-        init(id: Int64? = nil, name: String, email: String) {
-            self.id = id
-            self.name = name
-            self.email = email
-            
-            super.init()
-        }
-        
-        required init(row: Row) {
-            id = row[Columns.id]
-            name = row[Columns.name]
-            email = row[Columns.email]
-            
-            super.init(row: row)
-        }
-        
-        override func encode(to container: inout PersistenceContainer) {
-            container[Columns.id] = id
-            container[Columns.name] = name
-            container[Columns.email] = email
-        }
-        
-        override func didInsert(with rowID: Int64, for column: String?) {
-            id = rowID
-        }
-        
-        /// The table name
-        override class var databaseTableName: String {
-            return "users"
-        }
-        
-        enum Columns: String, ColumnExpression {
-            case id, name, email
-        }
-    }
-    
     var dbQueue: DatabaseQueue!
     
     let usersTable = "users"
@@ -69,7 +28,7 @@ class ViewController: UIViewController {
             dbQueue = try DatabaseQueue(path: fileUrl.path)
             
             try dbQueue.write { db in
-                _ = try User.deleteAll(db)
+                _ = try User2.deleteAll(db)
             }
         } catch {
             print(error)
@@ -83,7 +42,7 @@ class ViewController: UIViewController {
                 try db.create(table: usersTable) { table in
                     table.autoIncrementedPrimaryKey(id).primaryKey()
                     table.column(name)
-                    table.column(email).unique()
+                    table.column(email)
                 }
             }
         } catch {
@@ -94,13 +53,9 @@ class ViewController: UIViewController {
     @IBAction func insertUser(_ sender: Any) {
         do {
             try dbQueue.write { db in
-                let user1 = User(name: "User1", email: "a@a.com")
-                let user2 = User(name: "User2", email: "c@b.com")
-                let user3 = User(name: "User3", email: "c@c.com")
+                let user1 = User2(name: "User1", email: "a@a.com")
                 
                 try user1.insert(db)
-                try user2.insert(db)
-                try user3.insert(db)
             }
         } catch {
             print(error)
@@ -110,8 +65,9 @@ class ViewController: UIViewController {
     @IBAction func listUsers(_ sender: Any) {
         do {
             try dbQueue.read { db in
-                let users = try User.fetchAll(db)
+                let users = try User2.fetchAll(db)
                 for user in users {
+                    print(user.id ?? 0)
                     print(user.name)
                     print(user.email)
                 }
@@ -130,7 +86,7 @@ class ViewController: UIViewController {
 //                }
                 
                 // Such records can also delete according to primary key or any unique index:
-                let user = try User.fetchOne(db, key: ["email": "a@a.com"])
+                var user = try User2.fetchOne(db, key: 1)
                 user?.email = "d@d.com"
                 try user?.update(db)
             }
@@ -142,11 +98,10 @@ class ViewController: UIViewController {
     @IBAction func deleteUser(_ sender: Any) {
         do {
             try dbQueue.write { db in
-                _ = try User.deleteOne(db, key: ["email": "d@d.com"])
+                _ = try User2.deleteOne(db, key: 1)
             }
         } catch {
             print(error)
         }
     }
 }
-

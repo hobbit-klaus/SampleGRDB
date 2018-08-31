@@ -13,6 +13,8 @@
 		0EC5AA6D2134DECC00148B6F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0EC5AA6B2134DECC00148B6F /* Main.storyboard */; };
 		0EC5AA6F2134DECD00148B6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EC5AA6E2134DECD00148B6F /* Assets.xcassets */; };
 		0EC5AA722134DECD00148B6F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0EC5AA702134DECD00148B6F /* LaunchScreen.storyboard */; };
+		0EEEE3E72139447C00143BBF /* User2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEEE3E62139447C00143BBF /* User2.swift */; };
+		0EEEE3E9213944A600143BBF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEEE3E8213944A600143BBF /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +25,8 @@
 		0EC5AA6E2134DECD00148B6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0EC5AA712134DECD00148B6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0EC5AA732134DECD00148B6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0EEEE3E62139447C00143BBF /* User2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User2.swift; sourceTree = "<group>"; };
+		0EEEE3E8213944A600143BBF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		20AEE4C6D9BD76B61C1BC76C /* Pods-SampleGRDB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleGRDB.release.xcconfig"; path = "Pods/Target Support Files/Pods-SampleGRDB/Pods-SampleGRDB.release.xcconfig"; sourceTree = "<group>"; };
 		B6E28649A7E1B9A46486513F /* Pods_SampleGRDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SampleGRDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD670A3D140B428B1862811B /* Pods-SampleGRDB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleGRDB.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SampleGRDB/Pods-SampleGRDB.debug.xcconfig"; sourceTree = "<group>"; };
@@ -67,6 +71,8 @@
 				0EC5AA6E2134DECD00148B6F /* Assets.xcassets */,
 				0EC5AA702134DECD00148B6F /* LaunchScreen.storyboard */,
 				0EC5AA732134DECD00148B6F /* Info.plist */,
+				0EEEE3E8213944A600143BBF /* User.swift */,
+				0EEEE3E62139447C00143BBF /* User2.swift */,
 			);
 			path = SampleGRDB;
 			sourceTree = "<group>";
@@ -200,6 +206,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EEEE3E9213944A600143BBF /* User.swift in Sources */,
+				0EEEE3E72139447C00143BBF /* User2.swift in Sources */,
 				0EC5AA6A2134DECC00148B6F /* ViewController.swift in Sources */,
 				0EC5AA682134DECC00148B6F /* AppDelegate.swift in Sources */,
 			);
